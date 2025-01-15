@@ -16,6 +16,7 @@ class Game {
         // 初始化游戏对象
         this.snake = new Snake(this.canvas);
         this.food = new Food(this.canvas, this.gridSize);
+        this.food.setSnake(this.snake);
         
         // 游戏状态
         this.isRunning = false;
@@ -97,6 +98,7 @@ class Game {
         // 重置游戏
         this.snake = new Snake(this.canvas);
         this.food = new Food(this.canvas, this.gridSize);
+        this.food.setSnake(this.snake);
     }
 
     // 更新分数显示
