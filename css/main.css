@@ -1,44 +1,153 @@
+/* 全局样式 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: #f0f2f5;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 游戏容器 */
 .game-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
+    padding: 30px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 95%;
 }
 
+/* 游戏标题 */
+.game-title {
+    font-size: 2.5em;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* 画布样式 */
 #gameCanvas {
-    border: 2px solid #333;
-    background: #f0f0f0;
+    border-radius: 15px;
+    background: #fafafa;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    margin: 20px 0;
 }
 
-.score {
-    margin: 10px 0;
-    font-size: 20px;
-}
-
-#startButton {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
+/* 控制面板 */
 .controls {
     display: flex;
     gap: 20px;
-    margin: 10px 0;
-    align-items: center;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* 按钮样式 */
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#startButton {
+    background: #4CAF50;
+    color: white;
+}
+
+#startButton:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+}
+
+/* 分数显示 */
+.score-container {
+    display: flex;
+    gap: 30px;
+    margin: 20px 0;
+    font-size: 1.2em;
+}
+
+.score, .high-score {
+    background: #f8f9fa;
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.score span, .high-score span {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+/* 难度选择器 */
+.difficulty {
+    margin: 15px 0;
 }
 
 .difficulty select {
-    padding: 5px;
+    padding: 10px 20px;
     font-size: 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
 }
 
+.difficulty select:hover {
+    border-color: #4CAF50;
+}
+
+/* 游戏说明 */
 .instructions {
     margin-top: 20px;
-    text-align: center;
-    color: #666;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.instructions h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
 }
 
 .instructions p {
+    color: #6c757d;
+    line-height: 1.6;
     margin: 5px 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 600px) {
+    .game-container {
+        padding: 15px;
+    }
+    
+    .game-title {
+        font-size: 2em;
+    }
+    
+    .controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    button {
+        width: 100%;
+    }
 } 
