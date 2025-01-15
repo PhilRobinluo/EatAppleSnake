@@ -167,19 +167,169 @@ class Game {
         // 清空画布
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
+        // 绘制网格背景
+        this.drawGrid();
+        
         // 绘制蛇
-        this.ctx.fillStyle = '#4CAF50';
-        for (const part of this.snake.body) {
-            this.ctx.fillRect(
-                part.x * this.gridSize,
-                part.y * this.gridSize,
-                this.gridSize - 1,
-                this.gridSize - 1
-            );
-        }
+        this.drawSnake();
         
         // 绘制食物
         this.food.draw(this.ctx);
+
+        // 如果游戏暂停，绘制暂停提示
+        if (this.isPaused) {
+            this.drawPauseScreen();
+        }
+    }
+
+    // 绘制网格背景
+    drawGrid() {
+        this.ctx.strokeStyle = '#f0f0f0';
+        this.ctx.lineWidth = 0.5;
+        
+        for (let x = 0; x <= this.canvas.width; x += this.gridSize) {
+            this.ctx.beginPath();
+            this.ctx.moveTo(x, 0);
+            this.ctx.lineTo(x, this.canvas.height);
+            this.ctx.stroke();
+        }
+        
+        for (let y = 0; y <= this.canvas.height; y += this.gridSize) {
+            this.ctx.beginPath();
+            this.ctx.moveTo(0, y);
+            this.ctx.lineTo(this.canvas.width, y);
+            this.ctx.stroke();
+        }
+    }
+
+    // 绘制蛇
+    drawSnake() {
+        const body = this.snake.body;
+        
+        // 保存当前绘图状态
+        this.ctx.save();
+        
+        // 遍历蛇身
+        for (let i = 0; i < body.length; i++) {
+            const part = body[i];
+            const x = part.x * this.gridSize;
+            const y = part.y * this.gridSize;
+            
+            // 设置基本样式
+            this.ctx.fillStyle = i === 0 ? '#2ecc71' : '#27ae60'; // 蛇头深绿，蛇身浅绿
+            
+            // 绘制圆角矩形作为基本形状
+            this.drawRoundedRect(
+                x + 1,
+                y + 1,
+                this.gridSize - 2,
+                this.gridSize - 2,
+                5
+            );
+
+            // 为蛇头添加特殊装饰
+            if (i === 0) {
+                this.drawSnakeHead(x, y, this.snake.direction);
+            }
+
+            // 添加鳞片效果
+            this.drawSnakeScales(x, y);
+        }
+        
+        // 恢复绘图状态
+        this.ctx.restore();
+    }
+
+    // 绘制圆角矩形
+    drawRoundedRect(x, y, width, height, radius) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(x + radius, y);
+        this.ctx.lineTo(x + width - radius, y);
+        this.ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        this.ctx.lineTo(x + width, y + height - radius);
+        this.ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        this.ctx.lineTo(x + radius, y + height);
+        this.ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        this.ctx.lineTo(x, y + radius);
+        this.ctx.quadraticCurveTo(x, y, x + radius, y);
+        this.ctx.closePath();
+        this.ctx.fill();
+    }
+
+    // 绘制蛇头
+    drawSnakeHead(x, y, direction) {
+        const centerX = x + this.gridSize / 2;
+        const centerY = y + this.gridSize / 2;
+        const eyeRadius = this.gridSize / 8;
+        
+        // 根据方向调整眼睛位置
+        let leftEyeX, leftEyeY, rightEyeX, rightEyeY;
+        
+        switch(direction) {
+            case 'up':
+                leftEyeX = centerX - this.gridSize/4;
+                leftEyeY = centerY - this.gridSize/4;
+                rightEyeX = centerX + this.gridSize/4;
+                rightEyeY = centerY - this.gridSize/4;
+                break;
+            case 'down':
+                leftEyeX = centerX - this.gridSize/4;
+                leftEyeY = centerY + this.gridSize/4;
+                rightEyeX = centerX + this.gridSize/4;
+                rightEyeY = centerY + this.gridSize/4;
+                break;
+            case 'left':
+                leftEyeX = centerX - this.gridSize/4;
+                leftEyeY = centerY - this.gridSize/4;
+                rightEyeX = centerX - this.gridSize/4;
+                rightEyeY = centerY + this.gridSize/4;
+                break;
+            case 'right':
+                leftEyeX = centerX + this.gridSize/4;
+                leftEyeY = centerY - this.gridSize/4;
+                rightEyeX = centerX + this.gridSize/4;
+                rightEyeY = centerY + this.gridSize/4;
+                break;
+        }
+        
+        // 绘制眼睛
+        this.ctx.fillStyle = 'white';
+        this.ctx.beginPath();
+        this.ctx.arc(leftEyeX, leftEyeY, eyeRadius, 0, Math.PI * 2);
+        this.ctx.arc(rightEyeX, rightEyeY, eyeRadius, 0, Math.PI * 2);
+        this.ctx.fill();
+        
+        // 绘制眼球
+        this.ctx.fillStyle = 'black';
+        this.ctx.beginPath();
+        this.ctx.arc(leftEyeX, leftEyeY, eyeRadius/2, 0, Math.PI * 2);
+        this.ctx.arc(rightEyeX, rightEyeY, eyeRadius/2, 0, Math.PI * 2);
+        this.ctx.fill();
+    }
+
+    // 绘制蛇的鳞片效果
+    drawSnakeScales(x, y) {
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        const scaleSize = this.gridSize / 4;
+        
+        // 绘制鳞片图案
+        this.ctx.beginPath();
+        this.ctx.arc(x + this.gridSize/2, y + this.gridSize/2, scaleSize, 0, Math.PI * 2);
+        this.ctx.fill();
+    }
+
+    // 绘制暂停屏幕
+    drawPauseScreen() {
+        // 半透明背景
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // 暂停文字
+        this.ctx.fillStyle = 'white';
+        this.ctx.font = 'bold 30px Arial';
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillText('游戏暂停', this.canvas.width/2, this.canvas.height/2);
     }
 
     // 添加暂停/继续功能
