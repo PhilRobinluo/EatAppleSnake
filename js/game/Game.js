@@ -37,11 +37,17 @@ class Game {
         this.highScore = localStorage.getItem('snakeHighScore') || 0;
         this.updateHighScore();
         
-        // 绑定事件处理
+        // 添加触摸事件相关变量
+        this.touchStartX = 0;
+        this.touchStartY = 0;
+        this.touchEndX = 0;
+        this.touchEndY = 0;
+        
+        // 初始化事件监听
         this.bindEvents();
     }
 
-    // 绑定键盘和按钮事件
+    // 绑定键盘和触摸事件
     bindEvents() {
         // 键盘控制
         document.addEventListener('keydown', (e) => {
@@ -64,6 +70,42 @@ class Game {
                     if (this.snake.direction !== 'left') 
                         this.snake.direction = 'right';
                     break;
+            }
+        });
+
+        // 触摸事件处理
+        this.canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // 阻止默认滚动行为
+            this.touchStartX = e.touches[0].clientX;
+            this.touchStartY = e.touches[0].clientY;
+        });
+
+        this.canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.touchEndX = e.changedTouches[0].clientX;
+            this.touchEndY = e.changedTouches[0].clientY;
+
+            // 计算滑动距离
+            const deltaX = this.touchEndX - this.touchStartX;
+            const deltaY = this.touchEndY - this.touchStartY;
+
+            // 判断滑动方向（使用最小滑动距离阈值）
+            const minSwipeDistance = 30;
+
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
+                // 水平滑动
+                if (deltaX > 0 && this.snake.direction !== 'left') {
+                    this.snake.direction = 'right';
+                } else if (deltaX < 0 && this.snake.direction !== 'right') {
+                    this.snake.direction = 'left';
+                }
+            } else if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > minSwipeDistance) {
+                // 垂直滑动
+                if (deltaY > 0 && this.snake.direction !== 'up') {
+                    this.snake.direction = 'down';
+                } else if (deltaY < 0 && this.snake.direction !== 'down') {
+                    this.snake.direction = 'up';
+                }
             }
         });
 
