@@ -16,6 +16,7 @@
 </head>
 <body>
     <div class="game-container">
+        <button id="themeToggle">🌞</button>
         <h1 class="game-title">贪吃蛇游戏</h1>
         <canvas id="gameCanvas"></canvas>
         <div class="controls">
@@ -44,5 +45,39 @@
     <script src="js/game/Snake.js"></script>
     <script src="js/game/Food.js"></script>
     <script src="js/game/Game.js"></script>
+    <script>
+        // 主题切换功能
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            // 获取 html 元素
+            const html = document.documentElement;
+            const themeButton = document.getElementById('themeToggle');
+            
+            // 检查当前主题
+            const currentTheme = html.getAttribute('data-theme');
+            
+            // 切换主题
+            if (currentTheme === 'dark') {
+                html.removeAttribute('data-theme');
+                themeButton.textContent = '🌞';
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                themeButton.textContent = '🌙';
+            }
+            
+            // 保存主题设置
+            localStorage.setItem('theme', currentTheme === 'dark' ? 'light' : 'dark');
+        });
+
+        // 页面加载时恢复保存的主题设置
+        window.addEventListener('load', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeButton = document.getElementById('themeToggle');
+            
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeButton.textContent = '🌙';
+            }
+        });
+    </script>
 </body>
 </html> 

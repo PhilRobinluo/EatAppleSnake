@@ -1,135 +1,109 @@
-/* 全局样式 */
+/* 主题变量定义 - 明亮主题（默认） */
+:root {
+    --bg-color: #ffffff;
+    --snake-color: #2ecc71;
+    --food-color: #e74c3c;
+    --text-color: #333333;
+    --border-color: #95a5a6;
+    --button-bg: #3498db;
+    --button-text: #ffffff;
+    --canvas-bg: #f5f5f5;
+}
+
+/* 暗黑主题 */
+[data-theme="dark"] {
+    --bg-color: #2c3e50;
+    --snake-color: #27ae60;
+    --food-color: #c0392b;
+    --text-color: #ecf0f1;
+    --border-color: #7f8c8d;
+    --button-bg: #34495e;
+    --button-text: #ecf0f1;
+    --canvas-bg: #34495e;
+}
+
+/* 基础样式 */
 body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: all 0.3s ease;
     margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-    background: #f0f2f5;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 20px;
+    font-family: Arial, sans-serif;
 }
 
-/* 游戏容器 */
 .game-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     max-width: 800px;
-    width: 95%;
-}
-
-/* 游戏标题 */
-.game-title {
-    font-size: 2.5em;
-    color: #2c3e50;
-    margin-bottom: 20px;
+    margin: 0 auto;
     text-align: center;
-    font-weight: bold;
 }
 
-/* 画布样式 */
+.game-title {
+    color: var(--text-color);
+    margin-bottom: 20px;
+}
+
 #gameCanvas {
-    border-radius: 15px;
-    background: #fafafa;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    margin: 20px 0;
+    background-color: var(--canvas-bg);
+    border: 2px solid var(--border-color);
 }
 
-/* 控制面板 */
-.controls {
-    display: flex;
-    gap: 20px;
-    margin: 20px 0;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-/* 按钮样式 */
+/* 控制按钮样式 */
 button {
-    padding: 12px 25px;
-    font-size: 16px;
+    background-color: var(--button-bg);
+    color: var(--button-text);
     border: none;
-    border-radius: 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-weight: bold;
-    text-transform: uppercase;
 }
 
-#startButton {
-    background: #4CAF50;
-    color: white;
+button:hover {
+    opacity: 0.9;
 }
 
-#startButton:hover {
-    background: #45a049;
-    transform: translateY(-2px);
-}
-
-/* 分数显示 */
-.score-container {
+/* 主题切换按钮样式 */
+#themeToggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
     display: flex;
-    gap: 30px;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+}
+
+/* 分数显示样式 */
+.score-container {
     margin: 20px 0;
-    font-size: 1.2em;
+    color: var(--text-color);
 }
 
-.score, .high-score {
-    background: #f8f9fa;
-    padding: 10px 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-.score span, .high-score span {
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-/* 难度选择器 */
-.difficulty {
-    margin: 15px 0;
-}
-
-.difficulty select {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: 2px solid #e9ecef;
-    border-radius: 10px;
-    background: white;
-    cursor: pointer;
-    outline: none;
-    transition: all 0.3s ease;
-}
-
-.difficulty select:hover {
-    border-color: #4CAF50;
-}
-
-/* 游戏说明 */
+/* 游戏说明样式 */
 .instructions {
     margin-top: 20px;
     padding: 20px;
-    background: #f8f9fa;
-    border-radius: 10px;
-    width: 100%;
-    box-sizing: border-box;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
 }
 
-.instructions h3 {
-    color: #2c3e50;
-    margin-bottom: 10px;
-}
-
-.instructions p {
-    color: #6c757d;
-    line-height: 1.6;
-    margin: 5px 0;
+/* 难度选择样式 */
+.difficulty select {
+    padding: 8px;
+    margin: 10px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
 }
 
 /* 响应式设计 */
