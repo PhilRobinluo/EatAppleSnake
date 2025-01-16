@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贪吃蛇游戏</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script>
+        // 阻止方向键滚动页面
+        window.addEventListener("keydown", function(e) {
+            if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+                e.preventDefault();
+            }
+        }, false);
+    </script>
+</head>
+<body>
+    <div class="game-container">
+        <button id="themeToggle">🌞</button>
+        <h1 class="game-title">贪吃蛇游戏</h1>
+        <canvas id="gameCanvas"></canvas>
+        <div class="controls">
+            <div class="difficulty">
+                <select id="difficultySelect">
+                    <option value="easy">简单模式</option>
+                    <option value="normal" selected>普通模式</option>
+                    <option value="hard">困难模式</option>
+                </select>
+            </div>
+            <button id="startButton">开始游戏</button>
+        </div>
+        <div class="score-container">
+            <div class="score">当前分数: <span id="scoreValue">0</span></div>
+            <div class="high-score">最高分数: <span id="highScoreValue">0</span></div>
+        </div>
+        <div class="instructions">
+            <h3>游戏说明</h3>
+            <p>🎮 使用键盘方向键控制蛇的移动方向</p>
+            <p>⏸️ 按空格键可以暂停/继续游戏</p>
+            <p>🎯 吃到食物可以增加分数和蛇的长度</p>
+            <p>⚠️ 注意不要撞到墙壁或自己的身体</p>
+        </div>
+    </div>
+    
+    <script src="js/game/Snake.js"></script>
+    <script src="js/game/Food.js"></script>
+    <script src="js/game/Game.js"></script>
+    <script>
+        // 主题切换功能
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            // 获取 html 元素
+            const html = document.documentElement;
+            const themeButton = document.getElementById('themeToggle');
+            
+            // 检查当前主题
+            const currentTheme = html.getAttribute('data-theme');
+            
+            // 切换主题
+            if (currentTheme === 'dark') {
+                html.removeAttribute('data-theme');
+                themeButton.textContent = '🌞';
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                themeButton.textContent = '🌙';
+            }
+            
+            // 保存主题设置
+            localStorage.setItem('theme', currentTheme === 'dark' ? 'light' : 'dark');
+        });
+
+        // 页面加载时恢复保存的主题设置
+        window.addEventListener('load', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeButton = document.getElementById('themeToggle');
+            
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeButton.textContent = '🌙';
+            }
+        });
+    </script>
+</body>
+</html> 
